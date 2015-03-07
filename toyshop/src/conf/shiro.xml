@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="userRealm" class="com.toyshop.www.auth.CustomerRealm"></bean>
+	<bean id="adminRealm" class="com.toyshop.www.auth.AdminRealm"></bean>
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login" />
+		<property name="filterChainDefinitions">
+			<value>
+				/login = authc
+				/logout = logout
+				/** = anon
+			</value>
+		</property>
+	</bean>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="userRealm" />
+	</bean>
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+	<bean id="aperms"
+		class="com.toyshop.www.auth.AdminPermissionsAuthorizationFilter">
+	</bean>
+	<bean id="aroles" class="com.toyshop.www.auth.AdminRolesAuthorizationFilter">
+	</bean>
+	<bean id="cperms"
+		class="com.toyshop.www.auth.CustomerPermissionsAuthorizationFilter">
+	</bean>
+	<bean id="croles" class="com.toyshop.www.auth.CustomerRolesAuthorizationFilter">
+	</bean>
+</beans>
